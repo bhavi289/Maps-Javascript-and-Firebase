@@ -16,10 +16,10 @@
       }
     </style>
   </head>
-  <body>
+
+  <body>   
     <div id="map"></div>
-   </body>
-    
+  </body>  
 
    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
    <script>
@@ -35,17 +35,28 @@
      firebase.initializeApp(config);
    </script>
 
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>    
     <script>
+
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else { 
+            alert("Geolocation is not supported by this browser.");
+        }
+    });
+
+    
+    function showPosition(position) {
+        // x.innerHTML = "Latitude: " + position.coords.latitude + 
+        // "<br>Longitude: " + position.coords.longitude;
       var map;
-      function initMap(){
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 2,
-          center: new google.maps.LatLng(2.8,-187.3),
+      map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: new google.maps.LatLng(position.coords.latitude,position.coords.longitude),
           mapTypeId: 'terrain'
         });
-
-        var marker= {};
-
 
         var db = firebase.database();
         console.log("db=",db);
@@ -62,12 +73,59 @@
               marker.setMap(map) // Set market on the map 
              })
         })
+        
+    }    
+
+      var map;
+      function initMap(){
+        // map = new google.maps.Map(document.getElementById('map'), {
+        //   zoom: 5,
+        //   center: new google.maps.LatLng(13,80),
+        //   mapTypeId: 'terrain'
+        // });
+
+        // var marker= {};
+
+
+        // var db = firebase.database();
+        // console.log("db=",db);
+        // db.ref('geolocations/').on('value', points => {
+        //     console.log(points);
+        //     points.forEach(point=>{
+        //         marker = new google.maps.Marker({
+        //                  map:map,
+        //                  position: {
+        //                       lat: point.val().latitude,
+        //                       lng: point.val().longitude
+        //                  }
+        //         }) 
+        //       marker.setMap(map) // Set market on the map 
+        //      })
+        // })
     }
 
 
 
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOQpVdB1bOXwHobDgU1oxFpUa28y2fONU&callback=initMap">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOQpVdB1bOXwHobDgU1oxFpUa28y2fONU&&region=IN">
     </script>
+    
+<!--     
+    <script>
+    var x = document.getElementById("demo");
+    
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else { 
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+    
+    function showPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude + 
+        "<br>Longitude: " + position.coords.longitude;
+    }
+    </script> -->
+    
 </html>
