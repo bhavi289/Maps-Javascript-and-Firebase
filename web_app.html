@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+   </body>
+    
+
+   <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+   <script>
+     // Initialize Firebase
+     var config = {
+       apiKey: "AIzaSyBd8bzZrmOyeRPEcLDGHxW9JGMHX4K6D68",
+       authDomain: "ionicpositiontracker.firebaseapp.com",
+       databaseURL: "https://ionicpositiontracker.firebaseio.com",
+       projectId: "ionicpositiontracker",
+       storageBucket: "ionicpositiontracker.appspot.com",
+       messagingSenderId: "211146170123"
+     };
+     firebase.initializeApp(config);
+   </script>
+
+    <script>
+      var map;
+      function initMap(){
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: new google.maps.LatLng(2.8,-187.3),
+          mapTypeId: 'terrain'
+        });
+
+        var marker= {};
+
+
+        var db = firebase.database();
+        console.log("db=",db);
+        db.ref('geolocations/').on('value', points => {
+            console.log(points);
+            points.forEach(point=>{
+                marker = new google.maps.Marker({
+                         map:map,
+                         position: {
+                              lat: point.val().latitude,
+                              lng: point.val().longitude
+                         }
+                }) 
+              marker.setMap(map) // Set market on the map 
+             })
+        })
+    }
+
+
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOQpVdB1bOXwHobDgU1oxFpUa28y2fONU&callback=initMap">
+    </script>
+</html>
