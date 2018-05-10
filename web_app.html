@@ -37,6 +37,7 @@
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>    
     <script>
+    var gmarkers = [];      
 
     $( document ).ready(function() {
         console.log( "ready!" );
@@ -61,6 +62,7 @@
         var db = firebase.database();
         console.log("db=",db);
         db.ref('geolocations/').on('value', points => {
+            removeMarkers();
             console.log(points);
             points.forEach(point=>{
                 marker = new google.maps.Marker({
@@ -71,6 +73,7 @@
                          }
                 }) 
               marker.setMap(map) // Set market on the map 
+              gmarkers.push(marker);
              })
         })
         
@@ -102,6 +105,11 @@
         //       marker.setMap(map) // Set market on the map 
         //      })
         // })
+    }
+    function removeMarkers(){
+        for(i=0; i<gmarkers.length; i++){
+            gmarkers[i].setMap(null);
+        }
     }
 
 
